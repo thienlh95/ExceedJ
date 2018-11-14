@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "USERS")
@@ -13,10 +14,30 @@ public class Users {
 	@Id
 	@GeneratedValue(generator = "id", strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "userName")
+	@Column(unique = true,name = "userName")
 	private String userName;
 	@Column(name = "passWord")
 	private String passWord;
+	@Column(name = "role")
+	private boolean role;
+	@Column(name = "status")
+	private boolean status;
+	
+	public boolean isRole() {
+		return role;
+	}
+
+	public void setRole(boolean role) {
+		this.role = role;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 
 	public Users() {
 
