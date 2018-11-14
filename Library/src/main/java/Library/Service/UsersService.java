@@ -34,6 +34,34 @@ public class UsersService {
 		return user;
 	}
 
+	public Users login(String userName, String passWord) {
+		Users user = new Users();
+		// JsonNode node = parseJson(json);
+//			String userName = node.get(USER_NAME).textValue();
+//			String passWord = node.get(PASS_WORD).textValue();
+		user = usersRepository.findByUserNameAndPassWord(userName, passWord);
+		return user;
+
+	}
+
+	public int checkStatus(String userName) {
+		Users user = usersRepository.findByUserNameAndStatus(userName, true);
+		if (user != null) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	public int checkRole(String userName) {
+		Users user = usersRepository.findByUserNameAndRole(userName, true);
+		if (user != null) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
 	public String add(String json) {
 		try {
 			JsonNode node = parseJson(json);
@@ -45,6 +73,16 @@ public class UsersService {
 		} catch (Exception e) {
 			return e.getMessage();
 		}
+	}
+
+	public String add(String userName, String passWord) {
+		Users u = new Users();
+		u.setUserName(userName);
+		u.setPassWord(passWord);
+		u.setRole(true);
+		u.setStatus(true);
+		usersRepository.save(u);
+		return u.getUserName();
 	}
 
 	protected JsonNode parseJson(String obj) throws IOException {
