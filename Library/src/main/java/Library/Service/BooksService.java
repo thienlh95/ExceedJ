@@ -23,11 +23,11 @@ public class BooksService {
 		Books Book = new Books();
 		Book.setTitleBooks(TitleBooks);
 		Book.setGenre(Genre);
-		Book.setAmount(Amount);
 		Book.setAuthor(Author);
+		Book.setAmount(Amount);
 		Book.setPrice(Price);
 		booksRepository.save(Book);
-		return Book.getTitleBooks()+Book.getGenre()+Book.getAmount()+Book.getAuthor()+Book.getPrice();
+		return Book.getTitleBooks()+Book.getGenre()+Book.getAuthor()+Book.getAmount()+Book.getPrice();
 	}
 	protected JsonNode parseJson(String obj) throws IOException {
 		return objectMapper.readTree(obj);

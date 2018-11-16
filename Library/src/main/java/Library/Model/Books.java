@@ -9,6 +9,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Books")
 public class Books {
+	
+	public Books(String titleBooks, String genre, String author, String amount, String price) {
+		super();
+		TitleBooks = titleBooks;
+		Genre = genre;
+		Author = author;
+		Amount = amount;
+		Price = price;
+	}
+	
+	public Books() {}
+	
 	public Long getId() {
 		return id;
 	}
@@ -19,31 +31,31 @@ public class Books {
 		return TitleBooks;
 	}
 	public void setTitleBooks(String titleBooks) {
-		TitleBooks = titleBooks;
+		this.TitleBooks = titleBooks;
 	}
 	public String getGenre() {
 		return Genre;
 	}
-	public void setGenre(String menre) {
-		Genre = Genre;
+	public void setGenre(String genre) {
+		this.Genre = genre;
 	}
 	public String getAuthor() {
 		return Author;
 	}
 	public void setAuthor(String author) {
-		Author = author;
+		this.Author = author;
 	}
 	public String getAmount() {
 		return Amount;
 	}
 	public void setAmount(String amount) {
-		Amount = amount;
+		this.Amount = amount;
 	}
 	public String getPrice() {
 		return Price;
 	}
 	public void setPrice(String price) {
-		Price = price;
+		this.Price = price;
 	}
 	@Id
 	@GeneratedValue(generator = "id", strategy = GenerationType.IDENTITY)
