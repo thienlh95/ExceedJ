@@ -1,9 +1,12 @@
 package Library.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import Library.Model.Books;;
@@ -12,6 +15,9 @@ import Library.Model.Books;;
 public interface 
 BooksRepository extends CrudRepository<Books, Long>, JpaRepository<Books, Long> {
 	
-	
-	List<Books> findAll();
+	@Query(
+			  value = "SELECT b FROM books b WHERE b.Genre = :Genre", 
+			  nativeQuery = true)
+	List<Books> findByGenre(@Param("Genre") String Genre);
+	//List<Books> findAll();
 }
