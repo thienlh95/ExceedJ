@@ -1,6 +1,5 @@
 package Library.Controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import Library.Model.Users;
 import Library.Service.UsersService;
@@ -28,17 +26,20 @@ public class UsersController {
 //		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 //	}
 
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/library", method = RequestMethod.POST)
 	public ResponseEntity<String> login(@RequestBody Users user) {
 
 		int check = usersService.checkStatus(user.getUserName());
-		
+
 		if (check == 1) {
-			Users users = usersService.login(user.getUserName(), user.getPassWord());
+			user = usersService.login(user.getUserName(), user.getPassWord());
 			if (user != null) {
-				return new ResponseEntity<>("true", HttpStatus.OK);
+				return new ResponseEntity<>(user.getUserName(), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+
 			}
-			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 		}
@@ -74,7 +75,7 @@ public class UsersController {
 		}
 		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 	}
-	
+
 	@RequestMapping(value = "/library/users", method = RequestMethod.POST)
 	public ResponseEntity<String> add(@RequestBody Users user) {
 		String result = usersService.add(user.getUserName(), user.getPassWord());
@@ -83,7 +84,7 @@ public class UsersController {
 		}
 		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 	}
-	
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
 

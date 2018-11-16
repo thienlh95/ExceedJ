@@ -1,6 +1,9 @@
 package Library.Service;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +29,7 @@ public class UsersService {
 			JsonNode node = parseJson(json);
 			String userName = node.get(USER_NAME).textValue();
 			String passWord = node.get(PASS_WORD).textValue();
-			user = usersRepository.findByUserNameAndPassWord(userName, passWord);
+			user = usersRepository.findByUserNameAndPassWord(userName, md5(passWord));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -39,7 +42,7 @@ public class UsersService {
 		// JsonNode node = parseJson(json);
 //			String userName = node.get(USER_NAME).textValue();
 //			String passWord = node.get(PASS_WORD).textValue();
-		user = usersRepository.findByUserNameAndPassWord(userName, passWord);
+		user = usersRepository.findByUserNameAndPassWord(userName, md5(passWord));
 		return user;
 
 	}
@@ -75,10 +78,24 @@ public class UsersService {
 		}
 	}
 
+	private String md5(String passWord) {
+		String result = "";
+		MessageDigest digest;
+		try {
+			digest = MessageDigest.getInstance("MD5");
+			digest.update(passWord.getBytes());
+			BigInteger bigInteger = new BigInteger(1, digest.digest());
+			result = bigInteger.toString(16);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	public String add(String userName, String passWord) {
 		Users u = new Users();
 		u.setUserName(userName);
-		u.setPassWord(passWord);
+		u.setPassWord(md5(passWord));
 		u.setRole(false);
 		u.setStatus(true);
 		usersRepository.save(u);
