@@ -1,5 +1,6 @@
 package Library.Controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import Library.Model.Users;
 import Library.Service.UsersService;
 
 @Controller
-public class HomeController {
+public class UsersController {
 
 	@Autowired
 	private UsersService usersService;
@@ -27,13 +28,13 @@ public class HomeController {
 //		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 //	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ResponseEntity<String> login(@RequestParam String userName, @RequestParam String passWord) {
+	@RequestMapping(value = "/library", method = RequestMethod.POST)
+	public ResponseEntity<String> login(@RequestBody Users user) {
 
-		int check = usersService.checkStatus(userName);
-
+		int check = usersService.checkStatus(user.getUserName());
+		
 		if (check == 1) {
-			Users user = usersService.login(userName, passWord);
+			Users users = usersService.login(user.getUserName(), user.getPassWord());
 			if (user != null) {
 				return new ResponseEntity<>("true", HttpStatus.OK);
 			}
@@ -45,13 +46,13 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
-	public ResponseEntity<String> checkRole(@RequestParam String userName) {
+	public ResponseEntity<String> checkRole(@RequestBody Users user) {
 
-		int check = usersService.checkRole(userName);
+		int check = usersService.checkRole(user.getUserName());
 
 		if (check == 1) {
 			return new ResponseEntity<>("true", HttpStatus.OK);
-		} else{
+		} else {
 			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 		}
 	}
@@ -65,15 +66,24 @@ public class HomeController {
 //		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 //	}
 
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public ResponseEntity<String> add(@RequestParam String userName, @RequestParam String passWord) {
-		String resulrt = usersService.add(userName, passWord);
-		if (resulrt != null) {
-			return new ResponseEntity<>(resulrt, HttpStatus.OK);
+	@RequestMapping(value = "/library/users", method = RequestMethod.PATCH)
+	public ResponseEntity<String> update(@RequestBody Users user) {
+		String result = usersService.update(user.getUserName(), user.isRole(), user.isStatus());
+		if (result != null) {
+			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
 		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 	}
-
+	
+	@RequestMapping(value = "/library/users", method = RequestMethod.POST)
+	public ResponseEntity<String> add(@RequestBody Users user) {
+		String result = usersService.add(user.getUserName(), user.getPassWord());
+		if (result != null) {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+	}
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
 

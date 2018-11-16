@@ -16,5 +16,7 @@ public interface UsersRepository extends CrudRepository<Users, Long>, JpaReposit
 	
 	Users findByUserNameAndRole(String userName, boolean role);
 	
+	Users findByUserName(String userName);
+	
 	List<Users> findAll();
 }
