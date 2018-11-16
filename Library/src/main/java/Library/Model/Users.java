@@ -25,7 +25,7 @@ public class Users {
 	private String userName;
 	
 	@NotNull
-	@Size(min = 5, max = 10, message = "Password must be at least 5 characters and at most 10 characters")
+//	@Size(min = 5, max = 10, message = "Password must be at least 5 characters and at most 10 characters")
 	@Column(name = "passWord")
 	private String passWord;
 	@Column(name = "role")
