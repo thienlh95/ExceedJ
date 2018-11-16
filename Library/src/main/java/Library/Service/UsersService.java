@@ -79,10 +79,18 @@ public class UsersService {
 		Users u = new Users();
 		u.setUserName(userName);
 		u.setPassWord(passWord);
-		u.setRole(true);
+		u.setRole(false);
 		u.setStatus(true);
 		usersRepository.save(u);
 		return u.getUserName();
+	}
+
+	public String update(String userName, boolean role, boolean status) {
+		Users user = usersRepository.findByUserName(userName);
+		user.setRole(role);
+		user.setStatus(status);
+		usersRepository.save(user);
+		return user.getUserName() + user.isStatus() + user.isRole();
 	}
 
 	protected JsonNode parseJson(String obj) throws IOException {
