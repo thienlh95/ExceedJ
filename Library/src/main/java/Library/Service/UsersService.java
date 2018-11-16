@@ -1,6 +1,9 @@
 package Library.Service;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +29,40 @@ public class UsersService {
 			JsonNode node = parseJson(json);
 			String userName = node.get(USER_NAME).textValue();
 			String passWord = node.get(PASS_WORD).textValue();
-			user = usersRepository.findByUserNameAndPassWord(userName, passWord);
+			user = usersRepository.findByUserNameAndPassWord(userName, md5(passWord));
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return user;
+	}
+
+	public Users login(String userName, String passWord) {
+		Users user = new Users();
+		// JsonNode node = parseJson(json);
+//			String userName = node.get(USER_NAME).textValue();
+//			String passWord = node.get(PASS_WORD).textValue();
+		user = usersRepository.findByUserNameAndPassWord(userName, md5(passWord));
+		return user;
+
+	}
+
+	public int checkStatus(String userName) {
+		Users user = usersRepository.findByUserNameAndStatus(userName, true);
+		if (user != null) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	public int checkRole(String userName) {
+		Users user = usersRepository.findByUserNameAndRole(userName, true);
+		if (user != null) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 
 	public String add(String json) {
@@ -45,6 +76,38 @@ public class UsersService {
 		} catch (Exception e) {
 			return e.getMessage();
 		}
+	}
+
+	private String md5(String passWord) {
+		String result = "";
+		MessageDigest digest;
+		try {
+			digest = MessageDigest.getInstance("MD5");
+			digest.update(passWord.getBytes());
+			BigInteger bigInteger = new BigInteger(1, digest.digest());
+			result = bigInteger.toString(16);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public String add(String userName, String passWord) {
+		Users u = new Users();
+		u.setUserName(userName);
+		u.setPassWord(md5(passWord));
+		u.setRole(false);
+		u.setStatus(true);
+		usersRepository.save(u);
+		return u.getUserName();
+	}
+
+	public String update(String userName, boolean role, boolean status) {
+		Users user = usersRepository.findByUserName(userName);
+		user.setRole(role);
+		user.setStatus(status);
+		usersRepository.save(user);
+		return user.getUserName() + user.isStatus() + user.isRole();
 	}
 
 	protected JsonNode parseJson(String obj) throws IOException {

@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "USERS")
@@ -13,10 +16,37 @@ public class Users {
 	@Id
 	@GeneratedValue(generator = "id", strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "userName")
+
+	@NotBlank
+	@Size(min = 5, max = 10, message = "Name must be at least 5 characters and at most 10 characters")
+	@Pattern(regexp = "[A-Za-zàâéêèìôùûçÀÂÉÊÈÌÔÙÛÇ']+(\\\\s|\\\\-[A-Z]+)*")
+	@Column(unique = true, name = "userName")
 	private String userName;
+
+	@NotBlank
+//	@Size(min = 5, max = 10, message = "Password must be at least 5 characters and at most 10 characters")
 	@Column(name = "passWord")
 	private String passWord;
+	@Column(name = "role")
+	private boolean role;
+	@Column(name = "status")
+	private boolean status;
+
+	public boolean isRole() {
+		return role;
+	}
+
+	public void setRole(boolean role) {
+		this.role = role;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 
 	public Users() {
 
