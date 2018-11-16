@@ -38,9 +38,9 @@ public class BooksController {
 		}
 		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 	}
-	@RequestMapping(value = "/{genre}",method = RequestMethod.GET)
+	@RequestMapping("/{Genre}")
 	public List<Books> getGenre(@PathVariable("Genre")final String Genre) {
-		return (List<Books>)booksService.findByGenre(Genre);		
+		return (List<Books>)booksService.findByGenre(Genre);	
 		
 	}
 	@RequestMapping(value ="/getall",method = RequestMethod.GET)

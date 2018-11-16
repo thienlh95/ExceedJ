@@ -16,7 +16,7 @@ public interface
 BooksRepository extends CrudRepository<Books, Long>, JpaRepository<Books, Long> {
 	
 	@Query(
-			  value = "SELECT b FROM books b WHERE b.Genre = :Genre", 
+			  value = "SELECT * FROM books b WHERE b.genre like %:Genre%", 
 			  nativeQuery = true)
 	List<Books> findByGenre(@Param("Genre") String Genre);
 	//List<Books> findAll();
