@@ -28,15 +28,37 @@ public class BooksService {
 	public  List<Books> findByGenre(String Genre) {
 		return booksRepository.findByGenre(Genre);
 	}
-	public String add(String TitleBooks, String Genre,String Author,String Amount,String Price) {
+	public  List<Books> findByTitle(String title) {
+		return booksRepository.findByTitle(title);
+	}
+	public  List<Books> findByAuthor(String author) {
+		return booksRepository.findByAuthor(author);
+	}
+	public  List<Books> findByYear(String year) {
+		return booksRepository.findByYear(year);
+	}
+	public  List<Books> findByDesc(String desc) {
+		return booksRepository.findByDesc(desc);
+	}
+	public  List<Books> findByAvailable() {
+		return booksRepository.findByAvailable();
+	}
+	public  List<Books> findByUnAvailable() {
+		return booksRepository.findByUnAvailable();
+	}
+	
+	
+	public String add(String TitleBooks, String Genre,String Author,String Amount,String Price, String publishingYear,String shortDesc) {
 		Books Book = new Books();
 		Book.setTitleBooks(TitleBooks);
 		Book.setGenre(Genre);
 		Book.setAuthor(Author);
 		Book.setAmount(Amount);
 		Book.setPrice(Price);
+		Book.setPublishingYear(publishingYear);
+		Book.setShortDesc(shortDesc);
 		booksRepository.save(Book);
-		return Book.getTitleBooks()+Book.getGenre()+Book.getAuthor()+Book.getAmount()+Book.getPrice();
+		return Book.getTitleBooks()+Book.getGenre()+Book.getAuthor()+Book.getAmount()+Book.getPrice()+Book.getPublishingYear()+Book.getShortDesc();
 	}
 	
 	protected JsonNode parseJson(String obj) throws IOException {

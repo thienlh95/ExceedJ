@@ -12,17 +12,33 @@ import org.hibernate.annotations.NamedQuery;
 @Table(name = "Books")
 public class Books {
 	
-	public Books(String titleBooks, String genre, String author, String amount, String price) {
+	public Books(String titleBooks, String genre, String author, String amount, String price,String publishingYear, String shortDesc) {
 		super();
 		TitleBooks = titleBooks;
 		Genre = genre;
 		Author = author;
 		Amount = amount;
 		Price = price;
+		this.publishingYear = publishingYear;
+		this.shortDesc = shortDesc;
 	}
 	
+	
+
 	public Books() {}
 	
+	public String getShortDesc() {
+		return shortDesc;
+	}
+
+
+
+	public void setShortDesc(String shortDesc) {
+		this.shortDesc = shortDesc;
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}
@@ -59,6 +75,13 @@ public class Books {
 	public void setPrice(String price) {
 		this.Price = price;
 	}
+	public String getPublishingYear() {
+		return publishingYear;
+	}
+
+	public void setPublishingYear(String publishingYear) {
+		this.publishingYear = publishingYear;
+	}
 	@Id
 	@GeneratedValue(generator = "id", strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -73,4 +96,9 @@ public class Books {
 	private String Amount;
 	@Column(name = "Price")
 	private String Price;
+	@Column(name = "publishingYear")
+	private String publishingYear;
+	@Column(name = "shortDesc")
+	private String shortDesc;
+
 }
