@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import Library.Model.Books;
 //import Library.Repository.BooksRepository;
 import Library.Service.BooksService;
+import Library.Validator.BookFormValidator;
+//import Library.Validator.BookFormValidator;
 
 @RestController
 @RequestMapping("library/book")
@@ -31,12 +34,19 @@ public class BooksController {
 	private BooksService booksService; 
 	
 	@RequestMapping(value = "/addbooks", method = RequestMethod.POST)
-	public ResponseEntity<String> add(@RequestBody Books Book) {
-		String result = booksService.add(Book.getTitleBooks(),Book.getGenre(),Book.getAuthor(),Book.getAmount(),Book.getPrice(),Book.getPublishingYear(),Book.getShortDesc());
-		if (result != null) {
-			return new ResponseEntity<>(result, HttpStatus.OK);
+	public ResponseEntity<String> add(@RequestBody Books Book,BindingResult result,BookFormValidator BookFormValidator) {
+		BookFormValidator.validate(Book, result);
+		if(result.hasErrors()) 
+		{
+			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+		else {
+		String result1 = booksService.add(Book.getTitleBooks(),Book.getGenre(),Book.getAuthor(),Book.getAmount(),Book.getPrice(),Book.getPublishingYear(),Book.getShortDesc(),Book.getIsbn());
+		if (result != null) {
+			return new ResponseEntity<>(result1, HttpStatus.OK);
+		}
+			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	
