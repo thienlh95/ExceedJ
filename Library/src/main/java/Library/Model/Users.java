@@ -18,9 +18,9 @@ public class Users {
 	private Long id;
 
 	@NotBlank
-	@Size(min = 5, max = 10, message = "Name must be at least 5 characters and at most 10 characters")
-	@Pattern(regexp = "[A-Za-zàâéêèìôùûçÀÂÉÊÈÌÔÙÛÇ']+(\\\\s|\\\\-[A-Z]+)*")
-	@Column(unique = true, name = "userName")
+//	@Size(min = 5, max = 10, message = "Name must be at least 5 characters and at most 10 characters")
+//	@Pattern(regexp = "[A-Za-zàâéêèìôùûçÀÂÉÊÈÌÔÙÛÇ']+(\\\\s|\\\\-[A-Z]+)*")
+	@Column(name = "userName")
 	private String userName;
 
 	@NotBlank
@@ -31,6 +31,15 @@ public class Users {
 	private boolean isAdmin;
 	@Column(name = "isActive")
 	private boolean isActive;
+	@Column(name = "idTicket")
+	private int idTicket;
+	public int getIdTicket() {
+		return idTicket;
+	}
+
+	public void setIdTicket(int idTicket) {
+		this.idTicket = idTicket;
+	}
 
 	public Users() {
 

@@ -1,6 +1,7 @@
 package Library.Service;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,7 +16,7 @@ import Library.Model.Users;
 import Library.Repository.UsersRepository;
 
 @Service
-public class UsersService implements ServiceImpl {
+public class UserServiceImpl implements UserService {
 	@Autowired
 	ObjectMapper objectMapper;
 	@Autowired
@@ -86,5 +87,15 @@ public class UsersService implements ServiceImpl {
 	protected JsonNode parseJson(String obj) throws IOException {
 		return objectMapper.readTree(obj);
 
+	}
+
+	@Override
+	public int checkUserExist(String userName) {
+		Users user = usersRepository.findByUserName(userName);
+		if (user != null) {
+			return 1;
+		} else {
+			return 0;
+		}
 	}
 }

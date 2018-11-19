@@ -4,19 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import Library.Model.Users;
-import Library.Service.UsersService;
+import Library.Service.UserServiceImpl;
+import Library.Validator.UsersValidator;
 
 @Controller
-@RequestMapping(value="/library")
+@RequestMapping(value = "/library")
 public class UsersController {
 
 	@Autowired
-	private UsersService usersService;
+	private UserServiceImpl usersService;
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<String> login(@RequestBody Users user) {
@@ -29,7 +32,6 @@ public class UsersController {
 				return new ResponseEntity<>(user.getUserName(), HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
-
 			}
 		} else {
 			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
@@ -49,9 +51,9 @@ public class UsersController {
 		}
 	}
 
-	@RequestMapping(value = "/users", method = RequestMethod.PATCH)
-	public ResponseEntity<String> update(@RequestBody Users user) {
-		String result = usersService.update(user.getUserName(), user.isAdmin(), user.isActive());
+	@RequestMapping(value = "/{userName}", method = RequestMethod.PATCH)
+	public ResponseEntity<String> update(@RequestParam String userName,@RequestBody Users user) {
+		String result = usersService.update(userName, user.isAdmin(), user.isActive());
 		if (result != null) {
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
@@ -59,12 +61,23 @@ public class UsersController {
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
-	public ResponseEntity<String> add(@RequestBody Users user) {
-		String result = usersService.add(user.getUserName(), user.getPassword());
-		if (result != null) {
-			return new ResponseEntity<>(result, HttpStatus.OK);
+	public ResponseEntity<String> add(@RequestBody Users user, BindingResult a, UsersValidator userValidator) {
+		userValidator.validate(user, a);
+		if (a.hasErrors()) {
+			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+		} else {
+			int check = usersService.checkUserExist(user.getUserName());
+			if (check != 1) {
+				String result = usersService.add(user.getUserName(), user.getPassword());
+				if (result != null) {
+					return new ResponseEntity<>(result, HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+				}
+			} else {
+				return new ResponseEntity<>("exist", HttpStatus.NOT_FOUND);
+			}
 		}
-		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
