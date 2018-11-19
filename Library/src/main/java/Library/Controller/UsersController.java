@@ -28,10 +28,19 @@ public class UsersController {
 
 		if (check == 1) {
 			user = usersService.login(user.getUserName(), user.getPassword());
-			if (user != null) {
-				return new ResponseEntity<>(user.getUserName(), HttpStatus.OK);
+			int checkIsAdmin = usersService.checkIsAdmin(user.getUserName());
+			if (checkIsAdmin == 1) {
+				if (user != null) {
+					return new ResponseEntity<>(user.getUserName() + " " + user.isAdmin(), HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+				}
 			} else {
-				return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+				if (user != null) {
+					return new ResponseEntity<>(user.getUserName() + " " + user.isAdmin(), HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+				}
 			}
 		} else {
 			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
@@ -51,9 +60,9 @@ public class UsersController {
 		}
 	}
 
-	@RequestMapping(value = "/{userName}", method = RequestMethod.PATCH)
-	public ResponseEntity<String> update(@RequestParam String userName,@RequestBody Users user) {
-		String result = usersService.update(userName, user.isAdmin(), user.isActive());
+	@RequestMapping(value = "/users", method = RequestMethod.PATCH)
+	public ResponseEntity<String> update(@RequestBody Users user) {
+		String result = usersService.update(user.getUserName(), user.isAdmin(), user.isActive());
 		if (result != null) {
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
