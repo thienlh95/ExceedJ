@@ -40,6 +40,9 @@ public class BooksService {
 	public  List<Books> findByDesc(String desc) {
 		return booksRepository.findByDesc(desc);
 	}
+	public  List<Books> findByIsbn(String isbn) {
+		return booksRepository.findByIsbn(isbn);
+	}
 	public  List<Books> findByAvailable() {
 		return booksRepository.findByAvailable();
 	}
@@ -48,7 +51,7 @@ public class BooksService {
 	}
 	
 	
-	public String add(String TitleBooks, String Genre,String Author,String Amount,String Price, String publishingYear,String shortDesc) {
+	public String add(String TitleBooks, String Genre,String Author,String Amount,String Price, String publishingYear,String shortDesc,String isbn) {
 		Books Book = new Books();
 		Book.setTitleBooks(TitleBooks);
 		Book.setGenre(Genre);
@@ -57,11 +60,13 @@ public class BooksService {
 		Book.setPrice(Price);
 		Book.setPublishingYear(publishingYear);
 		Book.setShortDesc(shortDesc);
+		Book.setIsbn(isbn);
 		booksRepository.save(Book);
-		return Book.getTitleBooks()+Book.getGenre()+Book.getAuthor()+Book.getAmount()+Book.getPrice()+Book.getPublishingYear()+Book.getShortDesc();
+		return Book.getTitleBooks()+Book.getGenre()+Book.getAuthor()+Book.getAmount()+Book.getPrice()+Book.getPublishingYear()+Book.getShortDesc()+Book.getIsbn();
 	}
+	
 	
 	protected JsonNode parseJson(String obj) throws IOException {
 		return objectMapper.readTree(obj);
-	}	
+		}	
 }

@@ -42,7 +42,7 @@ BooksRepository extends CrudRepository<Books, Long>, JpaRepository<Books, Long> 
 	@Query(
 			  value = "SELECT * FROM books b WHERE b.short_desc like %:desc%", 
 			  nativeQuery = true)
-	List<Books> findByDesc(@Param("desc") String avail);
+	List<Books> findByDesc(@Param("desc") String desc);
 	
 	
 	@Query(
@@ -55,5 +55,9 @@ BooksRepository extends CrudRepository<Books, Long>, JpaRepository<Books, Long> 
 			  value = "SELECT * FROM books b WHERE b.amount =0", 
 			  nativeQuery = true)
 	List<Books> findByUnAvailable();
+	@Query(
+			  value = "SELECT * FROM books b WHERE b.isbn = :isbn", 
+			  nativeQuery = true)
+	List<Books> findByIsbn(@Param("isbn")String isbn);
 	//List<Books> findAll();
 }

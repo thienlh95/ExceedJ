@@ -2,18 +2,15 @@ package Library.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.NamedQuery;
 @Entity
 @Table(name = "Books")
 public class Books {
 	
-	public Books(String titleBooks, String genre, String author, String amount, String price,String publishingYear, String shortDesc) {
+	public Books(String titleBooks, String genre, String author, String amount, String price,String publishingYear, String shortDesc, String isbn) {
 		super();
+		this.isbn = isbn;
 		TitleBooks = titleBooks;
 		Genre = genre;
 		Author = author;
@@ -21,12 +18,26 @@ public class Books {
 		Price = price;
 		this.publishingYear = publishingYear;
 		this.shortDesc = shortDesc;
+		
+		
 	}
 	
 	
 
 	public Books() {}
 	
+	public String getIsbn() {
+		return isbn;
+	}
+
+
+
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
+	}
+
+
+
 	public String getShortDesc() {
 		return shortDesc;
 	}
@@ -36,45 +47,55 @@ public class Books {
 	public void setShortDesc(String shortDesc) {
 		this.shortDesc = shortDesc;
 	}
-
-
-
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+	
+	
+	
 	public String getTitleBooks() {
 		return TitleBooks;
 	}
+	
 	public void setTitleBooks(String titleBooks) {
 		this.TitleBooks = titleBooks;
 	}
+	
+	
+	
 	public String getGenre() {
 		return Genre;
 	}
+	
 	public void setGenre(String genre) {
 		this.Genre = genre;
 	}
+	
+	
+	
 	public String getAuthor() {
 		return Author;
 	}
+	
 	public void setAuthor(String author) {
 		this.Author = author;
 	}
+	
+	
 	public String getAmount() {
 		return Amount;
 	}
+	
+	
 	public void setAmount(String amount) {
 		this.Amount = amount;
 	}
 	public String getPrice() {
 		return Price;
 	}
+	
 	public void setPrice(String price) {
 		this.Price = price;
 	}
+	
+	
 	public String getPublishingYear() {
 		return publishingYear;
 	}
@@ -83,9 +104,8 @@ public class Books {
 		this.publishingYear = publishingYear;
 	}
 	@Id
-	@GeneratedValue(generator = "id", strategy = GenerationType.IDENTITY)
-	private Long id;
-
+	@Column(name = "isbn")
+	private String isbn;
 	@Column(name = "TitleBooks")
 	private String TitleBooks;
 	@Column(name = "Genre")

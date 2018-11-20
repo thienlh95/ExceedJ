@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 //import org.springframework.web.bind.annotation.PathVariable;
@@ -20,23 +22,33 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import Library.Model.Books;
+import Library.Repository.BooksRepository;
 //import Library.Repository.BooksRepository;
 import Library.Service.BooksService;
-
+import Library.Validator.BookFormValidator;
+import Library.Model.*;
 @RestController
-@RequestMapping("library/book")
+@RequestMapping("library/")
 public class BooksController {
 
 	@Autowired
 	private BooksService booksService; 
-	
+	@Autowired
+	private BooksRepository booksRepository; 
 	@RequestMapping(value = "/addbooks", method = RequestMethod.POST)
-	public ResponseEntity<String> add(@RequestBody Books Book) {
-		String result = booksService.add(Book.getTitleBooks(),Book.getGenre(),Book.getAuthor(),Book.getAmount(),Book.getPrice(),Book.getPublishingYear(),Book.getShortDesc());
-		if (result != null) {
-			return new ResponseEntity<>(result, HttpStatus.OK);
+	public ResponseEntity<String> add(@RequestBody Books Book,BindingResult result,BookFormValidator BookFormValidator) {
+		BookFormValidator.validate(Book, result);
+		if(result.hasErrors()) 
+		{
+			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+		else {
+		String result1 = booksService.add(Book.getTitleBooks(),Book.getGenre(),Book.getAuthor(),Book.getAmount(),Book.getPrice(),Book.getPublishingYear(),Book.getShortDesc(),Book.getIsbn());
+		if (result != null) {
+			return new ResponseEntity<>(result1, HttpStatus.OK);
+		}
+			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	
@@ -73,8 +85,20 @@ public class BooksController {
 		return (List<Books>)booksService.findByTitle(title);	
 		
 	}
-	@RequestMapping(value ="/getall",method = RequestMethod.GET)
+	@RequestMapping("isbn/{isbn}")
+	public List<Books> getIsbn(@PathVariable("isbn")final String isbn) {
+		return (List<Books>)booksService.findByIsbn(isbn);	
+		
+	}
+	@RequestMapping(value ="/book",method = RequestMethod.GET)
 	public List<Books> getAll(){
 		return (List<Books>)booksService.findAll();	
 	}
+	
+	@DeleteMapping("delete/book/{id}")
+	public void deleteBook(@PathVariable long id) {
+		booksRepository.deleteById(id);
+	}
+	
+	
 }
