@@ -10,11 +10,11 @@ import Library.Model.Users;
 
 @Repository
 public interface UsersRepository extends CrudRepository<Users, Long>, JpaRepository<Users, Long> {
-	Users findByUserNameAndPassWord(String userName, String passWord);
+	Users findByUserNameAndPassword(String userName, String password);
 
-	Users findByUserNameAndStatus(String userName, boolean status);
+	Users findByUserNameAndIsActive(String userName, boolean isActive);
 	
-	Users findByUserNameAndRole(String userName, boolean role);
+	Users findByUserNameAndIsAdmin(String userName, boolean isAdmin);
 	
 	Users findByUserName(String userName);
 	

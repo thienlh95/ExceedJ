@@ -14,11 +14,13 @@ public class BookFormValidator implements Validator {
 	@Override
 	public void validate(Object o, Errors errors) {
 		Books Book = (Books) o;
-		if(!Book.getTitleBooks().matches("^[a-zA-Z0-9\\s]*$"))
-		{
-			errors.rejectValue("TitleBooks", "not accept Special letter");
-		}
-		if(!Book.getAuthor().matches("^[a-zA-Z\\s]*$"))
+		
+	
+			if(!Book.getTitleBooks().matches("^[a-zA-Z0-9\\s]*$"))
+			{
+				errors.rejectValue("TitleBooks", "not accept Special letter");
+			}
+				if(!Book.getAuthor().matches("^[a-zA-Z\\s]*$"))
 		{
 			errors.rejectValue("Author", "not accept Special letter");
 		}

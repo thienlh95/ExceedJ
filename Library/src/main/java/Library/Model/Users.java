@@ -18,43 +18,36 @@ public class Users {
 	private Long id;
 
 	@NotBlank
-	@Size(min = 5, max = 10, message = "Name must be at least 5 characters and at most 10 characters")
-	@Pattern(regexp = "[A-Za-zàâéêèìôùûçÀÂÉÊÈÌÔÙÛÇ']+(\\\\s|\\\\-[A-Z]+)*")
-	@Column(unique = true, name = "userName")
+//	@Size(min = 5, max = 10, message = "Name must be at least 5 characters and at most 10 characters")
+//	@Pattern(regexp = "[A-Za-zàâéêè́ôùûçÀÂÉÊÈ̀ÔÙÛÇ']+(\\\\s|\\\\-[A-Z]+)*")
+	@Column(name = "userName")
 	private String userName;
 
 	@NotBlank
 //	@Size(min = 5, max = 10, message = "Password must be at least 5 characters and at most 10 characters")
-	@Column(name = "passWord")
-	private String passWord;
-	@Column(name = "role")
-	private boolean role;
-	@Column(name = "status")
-	private boolean status;
-
-	public boolean isRole() {
-		return role;
+	@Column(name = "password")
+	private String password;
+	@Column(name = "isAdmin")
+	private boolean isAdmin;
+	@Column(name = "isActive")
+	private boolean isActive;
+	@Column(name = "idTicket")
+	private int idTicket;
+	public int getIdTicket() {
+		return idTicket;
 	}
 
-	public void setRole(boolean role) {
-		this.role = role;
-	}
-
-	public boolean isStatus() {
-		return status;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = status;
+	public void setIdTicket(int idTicket) {
+		this.idTicket = idTicket;
 	}
 
 	public Users() {
 
 	}
 
-	public Users(String userName, String passWord) {
+	public Users(String userName, String password) {
 		this.userName = userName;
-		this.passWord = passWord;
+		this.password = password;
 	}
 
 	public Long getId() {
@@ -73,12 +66,28 @@ public class Users {
 		this.userName = userName;
 	}
 
-	public String getPassWord() {
-		return passWord;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

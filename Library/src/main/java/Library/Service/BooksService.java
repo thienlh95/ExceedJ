@@ -40,6 +40,9 @@ public class BooksService {
 	public  List<Books> findByDesc(String desc) {
 		return booksRepository.findByDesc(desc);
 	}
+	public  List<Books> findByIsbn(String isbn) {
+		return booksRepository.findByIsbn(isbn);
+	}
 	public  List<Books> findByAvailable() {
 		return booksRepository.findByAvailable();
 	}
@@ -61,6 +64,7 @@ public class BooksService {
 		booksRepository.save(Book);
 		return Book.getTitleBooks()+Book.getGenre()+Book.getAuthor()+Book.getAmount()+Book.getPrice()+Book.getPublishingYear()+Book.getShortDesc()+Book.getIsbn();
 	}
+	
 	
 	protected JsonNode parseJson(String obj) throws IOException {
 		return objectMapper.readTree(obj);
