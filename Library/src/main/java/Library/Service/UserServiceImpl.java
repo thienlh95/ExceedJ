@@ -65,28 +65,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String add(String userName, String password) {
+	public Users add(String userName, String password) {
 		Users u = new Users();
 		u.setUserName(userName);
 		u.setPassword(md5(password));
 		u.setAdmin(false);
 		u.setActive(true);
 		usersRepository.save(u);
-		return u.getUserName();
+		return u;
 	}
 
 	@Override
-	public String update(String userName, boolean admin, boolean active) {
+	public Users update(String userName, boolean admin, boolean active) {
 		Users user = usersRepository.findByUserName(userName);
 		user.setAdmin(admin);
 		user.setActive(active);
 		usersRepository.save(user);
-		return user.getUserName() + user.isActive() + user.isAdmin();
-	}
-
-	protected JsonNode parseJson(String obj) throws IOException {
-		return objectMapper.readTree(obj);
-
+		return user;
 	}
 
 	@Override

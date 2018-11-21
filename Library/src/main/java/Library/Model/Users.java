@@ -7,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "USERS")
@@ -19,7 +17,7 @@ public class Users {
 
 	@NotBlank
 //	@Size(min = 5, max = 10, message = "Name must be at least 5 characters and at most 10 characters")
-//	@Pattern(regexp = "[A-Za-zàâéêèìôùûçÀÂÉÊÈÌÔÙÛÇ']+(\\\\s|\\\\-[A-Z]+)*")
+//	@Pattern(regexp = "[A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½']+(\\\\s|\\\\-[A-Z]+)*")
 	@Column(name = "userName")
 	private String userName;
 
