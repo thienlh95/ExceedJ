@@ -2,7 +2,6 @@ package Library;
 
 import static org.mockito.Mockito.when;
 
-import org.aspectj.util.Reflection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +17,7 @@ import Library.Service.impl.UserServiceImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class LibraryApplicationTests {
+public class UsersTest {
 	private static final String USER_NAME = "test";
 	private static final String PASS = "test";
 	private static final boolean ISACTIVE = true;
@@ -85,7 +84,6 @@ public class LibraryApplicationTests {
 		Users us = service.login(USER_NAME, PASS);
 		Assert.assertEquals(USER_NAME, us.getUserName());
 		Assert.assertEquals(PASS, us.getPassword());
-		
 	}
 
 }
