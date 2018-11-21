@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import Library.Model.Users;
-import Library.Service.UserServiceImpl;
+import Library.Service.impl.UserServiceImpl;
 import Library.Validator.UsersValidator;
 
 @Controller

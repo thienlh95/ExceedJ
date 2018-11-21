@@ -1,7 +1,5 @@
-package Library.Service;
+package Library.Service.impl;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,11 +7,11 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Library.Model.Users;
 import Library.Repository.UsersRepository;
+import Library.Service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
