@@ -37,13 +37,14 @@ public class UsersController {
 		if (check == 1 && checkIsAdmin == 1) {
 			user = usersService.login(user.getUserName(), user.getPassword());
 			if (user != null) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>(user,HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 		} else if (check == 1 && checkIsAdmin == 0) {
+			user = usersService.login(user.getUserName(), user.getPassword());
 			if (user != null) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>(user,HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}

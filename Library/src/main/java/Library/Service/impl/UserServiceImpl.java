@@ -7,16 +7,12 @@ import java.security.NoSuchAlgorithmException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import Library.Model.Users;
 import Library.Repository.UsersRepository;
 import Library.Service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
-	@Autowired
-	ObjectMapper objectMapper;
 	@Autowired
 	private UsersRepository usersRepository;
 
@@ -69,7 +65,7 @@ public class UserServiceImpl implements UserService {
 		u.setPassword(md5(password));
 		u.setAdmin(false);
 		u.setActive(true);
-		usersRepository.save(u);
+		usersRepository.saveAndFlush(u);
 		return u;
 	}
 
@@ -78,11 +74,11 @@ public class UserServiceImpl implements UserService {
 		Users user = usersRepository.findByUserName(userName);
 		user.setAdmin(admin);
 		user.setActive(active);
-		usersRepository.save(user);
+		usersRepository.saveAndFlush(user);
 		return user;
 	}
 
-	@Override
+	@Override	
 	public int checkUserExist(String userName) {
 		Users user = usersRepository.findByUserName(userName);
 		if (user != null) {
