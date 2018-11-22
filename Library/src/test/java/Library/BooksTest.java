@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import Library.Model.Books;
 import Library.Repository.BooksRepository;
-import Library.Service.BooksService;
+import Library.Service.impl.BooksServiceImpl;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,7 +32,7 @@ public class BooksTest {
 	Books book;
 
 	@InjectMocks
-	BooksService service;
+	BooksServiceImpl service;
 
 	@Before
 	public void setUp() {
@@ -48,7 +48,7 @@ public class BooksTest {
 	}
 
 	@Test
-	public void add() {
+	public void addBooks() {
 		Books b = new Books();
 		b.setIsbn(ISBN);
 		b.setTitleBooks(TITLE_BOOK);

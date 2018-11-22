@@ -13,5 +13,5 @@ public interface BooksService {
 	List<Books> findByIsbn(String isbn);
 	List<Books> findByAvailable();
 	List<Books> findByDesc(String desc);
-	public String add(String TitleBooks, String Genre,String Author,String Amount,String Price, String publishingYear,String shortDesc,String isbn);
+	public Books add(String TitleBooks, String Genre,String Author,String Amount,String Price, String publishingYear,String shortDesc,String isbn);
 }

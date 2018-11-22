@@ -1,4 +1,4 @@
-package Library.Service;
+package Library.Service.impl;
 import java.util.List;
 
 
@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 
 import Library.Model.Books;
-import Library.Repository.BooksRepository;;
+import Library.Repository.BooksRepository;
+import Library.Service.BooksService;;
 @Service
 public class BooksServiceImpl implements BooksService{
 	@Autowired
@@ -38,7 +39,7 @@ public class BooksServiceImpl implements BooksService{
 	public  List<Books> findByAvailable() {
 		return booksRepository.findByAvailable();
 	}	
-	public String add(String TitleBooks, String Genre,String Author,String Amount,String Price, String publishingYear,String shortDesc,String isbn) {
+	public Books add(String TitleBooks, String Genre,String Author,String Amount,String Price, String publishingYear,String shortDesc,String isbn) {
 		Books Book = new Books();
 		Book.setTitleBooks(TitleBooks);
 		Book.setGenre(Genre);
@@ -49,7 +50,7 @@ public class BooksServiceImpl implements BooksService{
 		Book.setShortDesc(shortDesc);
 		Book.setIsbn(isbn);
 		booksRepository.save(Book);
-		return Book.getTitleBooks()+Book.getGenre()+Book.getAuthor()+Book.getAmount()+Book.getPrice()+Book.getPublishingYear()+Book.getShortDesc()+Book.getIsbn();
+		return Book;
 	}
 	
 }
