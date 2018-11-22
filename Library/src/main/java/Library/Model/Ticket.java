@@ -14,8 +14,6 @@ public class Ticket {
 	@Column(name = "idTicket")
 	@GeneratedValue(generator = "idTicket", strategy = GenerationType.IDENTITY)
 	private Long idTicket;
-	@Column(name = "limitNumber")
-	private String limitNumber;
 	@Column(name = "userName")
 	private String userName;
 	@Column(name = "isbn")
@@ -24,18 +22,7 @@ public class Ticket {
 	private String dateBorrow;
 	@Column(name = "dateReturn")
 	private String dateReturn;
-
-	public Ticket(Long idTicket, String limitNumber, String userName, String isbn, String dateBorrow,
-			String dateReturn) {
-		super();
-		this.idTicket = idTicket;
-		this.limitNumber = limitNumber;
-		this.userName = userName;
-		this.isbn = isbn;
-		this.dateBorrow = dateBorrow;
-		this.dateReturn = dateReturn;
-	}
-
+	
 	public Ticket(String userName, String isbn, String dateBorrow, String dateReturn) {
 		super();
 		this.userName = userName;
@@ -55,14 +42,6 @@ public class Ticket {
 
 	public void setIdTicket(Long idTicket) {
 		this.idTicket = idTicket;
-	}
-
-	public String getLimitNumber() {
-		return limitNumber;
-	}
-
-	public void setLimitNumber(String limitNumber) {
-		this.limitNumber = limitNumber;
 	}
 
 	public String getUserName() {

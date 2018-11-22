@@ -1,11 +1,15 @@
 package Library.Controller;
 
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,47 +20,54 @@ import org.springframework.web.bind.annotation.RestController;
 import Library.Model.Books;
 import Library.Repository.BooksRepository;
 import Library.Service.BooksService;
+import Library.Service.UserService;
 import Library.Validator.BookFormValidator;
 
 @RestController
-@RequestMapping("library/")
+@RequestMapping("/library")
 public class BooksController {
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private BooksService booksService;
 	@Autowired
 	private BooksRepository booksRepository;
+	@Autowired
+	private BookFormValidator bookValidator;
 
-	@RequestMapping(value = "/book", method = RequestMethod.POST)
-	public ResponseEntity<Books> add(@RequestBody Books Book, BindingResult result,
-			BookFormValidator BookFormValidator) {
-		BookFormValidator.validate(Book, result);
-		if (result.hasErrors()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} else {
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.setValidator(bookValidator);
+	}
+
+	@RequestMapping(value = "/{userName}/book", method = RequestMethod.POST)
+	public ResponseEntity<Books> add(@Valid @RequestBody Books Book, @PathVariable("userName") String userName) {
+		int check = userService.checkIsAdmin(userName);
+		if (check == 1) {
 			Book = booksService.add(Book.getTitleBooks(), Book.getGenre(), Book.getAuthor(), Book.getAmount(),
 					Book.getPrice(), Book.getPublishingYear(), Book.getShortDesc(), Book.getIsbn());
 			if (Book != null) {
 				return new ResponseEntity<>(Book, HttpStatus.OK);
 			}
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@RequestMapping(value = "/book/{id}", method = RequestMethod.PATCH)
-	public Books updateBook(@RequestBody Books book, @PathVariable(value = "id") long id,
-
-			BindingResult result, BookFormValidator BookFormValidator)
-
-	{
-		BookFormValidator.validate(book, result);
-		if (result.hasErrors()) {
-			return null;
-
+	@RequestMapping(value = "/{userName}/book/{id}", method = RequestMethod.PATCH)
+	public ResponseEntity<Books> updateBook(@Valid @RequestBody Books book, @PathVariable(value = "id") long id,
+			@PathVariable("userName") String userName) {
+		int check = userService.checkIsAdmin(userName);
+		if (check == 1) {
+			book = booksRepository.save(book);
+			return new ResponseEntity<>(book, HttpStatus.OK);
 		} else {
-
-			return booksRepository.save(book);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+
 	}
 
 	@RequestMapping(value = "/available", method = RequestMethod.GET)

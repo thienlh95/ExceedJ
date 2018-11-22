@@ -1,10 +1,12 @@
 package Library.Validator;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import Library.Model.Users;
 
+@Component
 public class UsersValidator implements Validator {
 
 	@Override
@@ -13,7 +15,6 @@ public class UsersValidator implements Validator {
 		return Users.class.equals(clazz);
 	}
 
-	@Override
 	public void validate(Object target, Errors errors) {
 		// TODO Auto-generated method stub
 		Users user = (Users) target;
@@ -21,7 +22,7 @@ public class UsersValidator implements Validator {
 			errors.rejectValue("userName", "not accept Special letter");
 		}
 		if (!user.getPassword().matches("^\\w{6,20}$")) {
-			errors.rejectValue("password", "not accept Special letter");
+			errors.rejectValue("password", "password not less than 6 and greater than 20");
 		}
 	}
 
