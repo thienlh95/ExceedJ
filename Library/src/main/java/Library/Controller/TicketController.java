@@ -41,8 +41,8 @@ public class TicketController {
 		binder.setValidator(ticketValidator);
 	}
 
-	@RequestMapping(value = "/ticket", method = RequestMethod.POST)
-	public ResponseEntity<Ticket> addTicket(@Valid @RequestBody Ticket ticket) {
+	@RequestMapping(value = "{userName}/ticket", method = RequestMethod.POST)
+	public ResponseEntity<Ticket> addTicket(@Valid @RequestBody Ticket ticket,@PathVariable(value="userName") String userName) {
 		ticket = ticketService.addTicket(ticket.getUserName(), ticket.getIsbn(), ticket.getDateBorrow(),
 				ticket.getDateReturn());
 		if (ticket != null) {
