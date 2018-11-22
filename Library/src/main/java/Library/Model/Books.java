@@ -2,20 +2,23 @@ package Library.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
 @Table(name = "Books")
 public class Books {
 	
-	public Books(String titleBooks, String genre, String author, String amount, String price,String publishingYear, String shortDesc, String isbn) {
+	public Books(long id,String titleBooks, String genre, String author, String amount, String price,String publishingYear, String shortDesc, String isbn) {
 		super();
+		this.id = id;
 		this.isbn = isbn;
-		TitleBooks = titleBooks;
-		Genre = genre;
-		Author = author;
-		Amount = amount;
-		Price = price;
+		this.titleBooks = titleBooks;
+		this.genre = genre;
+		this.author = author;
+		this.amount = amount;
+		this.price = price;
 		this.publishingYear = publishingYear;
 		this.shortDesc = shortDesc;
 		
@@ -26,6 +29,18 @@ public class Books {
 
 	public Books() {}
 	
+	public Long getId() {
+		return id;
+	}
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
 	public String getIsbn() {
 		return isbn;
 	}
@@ -51,48 +66,48 @@ public class Books {
 	
 	
 	public String getTitleBooks() {
-		return TitleBooks;
+		return titleBooks;
 	}
 	
 	public void setTitleBooks(String titleBooks) {
-		this.TitleBooks = titleBooks;
+		this.titleBooks = titleBooks;
 	}
 	
 	
 	
 	public String getGenre() {
-		return Genre;
+		return genre;
 	}
 	
 	public void setGenre(String genre) {
-		this.Genre = genre;
+		this.genre = genre;
 	}
 	
 	
 	
 	public String getAuthor() {
-		return Author;
+		return author;
 	}
 	
 	public void setAuthor(String author) {
-		this.Author = author;
+		this.author = author;
 	}
 	
 	
 	public String getAmount() {
-		return Amount;
+		return amount;
 	}
 	
 	
 	public void setAmount(String amount) {
-		this.Amount = amount;
+		this.amount = amount;
 	}
 	public String getPrice() {
-		return Price;
+		return price;
 	}
 	
 	public void setPrice(String price) {
-		this.Price = price;
+		this.price = price;
 	}
 	
 	
@@ -104,18 +119,21 @@ public class Books {
 		this.publishingYear = publishingYear;
 	}
 	@Id
+	@Column(name = "id")
+	@GeneratedValue(generator = "id", strategy = GenerationType.IDENTITY)
+	private Long id;
 	@Column(name = "isbn")
 	private String isbn;
-	@Column(name = "TitleBooks")
-	private String TitleBooks;
-	@Column(name = "Genre")
-	private String Genre;
-	@Column(name = "Author")
-	private String Author;
+	@Column(name = "titleBooks")
+	private String titleBooks;
+	@Column(name = "genre")
+	private String genre;
+	@Column(name = "author")
+	private String author;
 	@Column(name = "Amount")
-	private String Amount;
-	@Column(name = "Price")
-	private String Price;
+	private String amount;
+	@Column(name = "price")
+	private String price;
 	@Column(name = "publishingYear")
 	private String publishingYear;
 	@Column(name = "shortDesc")

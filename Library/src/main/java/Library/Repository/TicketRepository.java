@@ -13,12 +13,25 @@ import Library.Model.Ticket;
 
 @Repository
 public interface  TicketRepository extends CrudRepository<Ticket, Long>, JpaRepository<Ticket, Long>{
-	@Query(value = "UPDATE ticket SET user_name= :user, isbn= :isbn,date_borrow= :dateborrow,date_return= :datereturn WHERE id_ticket= :idticket",
-			  nativeQuery = true)
-	Ticket updateById(@Param("user") String user,@Param("isbn") String isbn,@Param("dateborrow") 
-	String dateborrow,@Param("datereturn") String datereturn,@Param("idticket") Long idticket);
+	//update ticket repository
+//	@Query(value = "UPDATE ticket SET user_name= ?, isbn= ?,date_borrow= ?,"
+//			+ "date_return= ? WHERE (user_name= :user AND id_ticket= :idticket) ",
+//			  nativeQuery = true)
+//	Ticket updateById(@Param("user") String user, @Param("idticket") Long idticket);
+//	
+	
+	
+	
+	
+	
 	@Query(
 			  value = "SELECT * FROM ticket t WHERE t.user_name = :username", 
 			  nativeQuery = true)
 	List<Ticket> findByUser(@Param("username") String username);
+	
+	
+	@Query(
+			  value = "DELETE FROM ticket t WHERE (t.user_name = :username AND t.id_ticket = :id)", 
+			  nativeQuery = true)
+	public Ticket deletebyUser(@Param("username")String username,@Param("id")long id);
 }

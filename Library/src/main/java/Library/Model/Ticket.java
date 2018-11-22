@@ -10,6 +10,7 @@ import javax.persistence.Table;
 @Table(name = "ticket")
 public class Ticket {
 	@Id
+	@Column(name = "idTicket")
 	@GeneratedValue(generator = "idTicket", strategy = GenerationType.IDENTITY)
 	private Long idTicket;
 	@Column(name = "limitNumber")

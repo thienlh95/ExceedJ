@@ -1,32 +1,22 @@
 package Library.Controller;
-
-//import java.nio.channels.ReadPendingException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-//import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import Library.Model.Books;
+import Library.Model.Ticket;
 import Library.Repository.BooksRepository;
-//import Library.Repository.BooksRepository;
 import Library.Service.BooksService;
 import Library.Validator.BookFormValidator;
-import Library.Model.*;
 @RestController
 @RequestMapping("library/")
 public class BooksController {
@@ -35,7 +25,7 @@ public class BooksController {
 	private BooksService booksService; 
 	@Autowired
 	private BooksRepository booksRepository; 
-	@RequestMapping(value = "/addbooks", method = RequestMethod.POST)
+	@RequestMapping(value = "/book", method = RequestMethod.POST)
 	public ResponseEntity<String> add(@RequestBody Books Book,BindingResult result,BookFormValidator BookFormValidator) {
 		BookFormValidator.validate(Book, result);
 		if(result.hasErrors()) 
@@ -50,51 +40,55 @@ public class BooksController {
 			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	
-	@RequestMapping("genre/{Genre}")
-	public List<Books> getGenre(@PathVariable("Genre")final String Genre) {
-		return (List<Books>)booksService.findByGenre(Genre);	
+	@RequestMapping(value = "/book/{id}", method = RequestMethod.PATCH)
+	public Books updateBook(@RequestBody Books book,@PathVariable(value ="id")long id,
+			
+			BindingResult result,BookFormValidator BookFormValidator)
 		
-	}
-	@RequestMapping("author/{author}")
-	public List<Books> getAuthor(@PathVariable("author")final String author) {
-		return (List<Books>)booksService.findByAuthor(author);	
+	{
+		BookFormValidator.validate(book, result);
+		if(result.hasErrors()) 
+		{			
+			return null;
 		
+		}else
+		{
+			
+			return booksRepository.save(book);
+		}
 	}
-	@RequestMapping("year/{year}")
-	public List<Books> getYear(@PathVariable("year")final String year) {
-		return (List<Books>)booksService.findByYear(year);	
-		
-	}
-	@RequestMapping("desc/{desc}")
-	public List<Books> getDesc(@PathVariable("desc")final String desc) {
-		return (List<Books>)booksService.findByDesc(desc);	
-		
-	}
-	@RequestMapping(value ="/getavailable",method = RequestMethod.GET)
+	@RequestMapping(value ="/available",method = RequestMethod.GET)
 	public List<Books> getavailable(){
 		return (List<Books>)booksService.findByAvailable();	
 	}
-	@RequestMapping(value ="/getunavailable",method = RequestMethod.GET)
-	public List<Books> getunavailable(){
-		return (List<Books>)booksService.findByUnAvailable();
-	}
-	@RequestMapping("title/{title}")
-	public List<Books> getTitle(@PathVariable("title")final String title) {
-		return (List<Books>)booksService.findByTitle(title);	
-		
-	}
-	@RequestMapping("isbn/{isbn}")
-	public List<Books> getIsbn(@PathVariable("isbn")final String isbn) {
-		return (List<Books>)booksService.findByIsbn(isbn);	
-		
-	}
 	@RequestMapping(value ="/book",method = RequestMethod.GET)
-	public List<Books> getAll(){
-		return (List<Books>)booksService.findAll();	
+	public List<Books> getBook(@RequestParam(value = "title",required = false)String title,
+							@RequestParam(value = "genre",required = false)String genre,
+							@RequestParam(value = "desc",required = false)String desc,
+							@RequestParam(value = "author",required = false)String author,
+							@RequestParam(value = "year",required = false)String year,
+							@RequestParam(value = "isbn",required = false)String isbn)
+	{
+		if(title!=null) {
+			return (List<Books>)booksService.findByTitle(title);
+			}
+			
+			if(genre!=null) {
+			return (List<Books>)booksService.findByGenre(genre);
+			}
+			if(desc!=null) {
+				return (List<Books>)booksService.findByDesc(desc);
+			}if(author!=null) {
+				return (List<Books>)booksService.findByAuthor(author);
+			}
+			if(year!=null) {
+				return (List<Books>)booksService.findByYear(year);
+			}
+			if(isbn!=null) {
+				return (List<Books>)booksService.findByIsbn(isbn);
+			}
+			return (List<Books>)booksService.findAll();
 	}
-	
 	@DeleteMapping("delete/book/{id}")
 	public void deleteBook(@PathVariable long id) {
 		booksRepository.deleteById(id);

@@ -1,16 +1,15 @@
 package Library.Validator;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
-import Library.Model.Books;
 import Library.Model.Ticket;
-
+@Component
 public class TicketValidator implements Validator{
 	
 	@Override
-	public boolean supports(Class<?> aClass) {
-		return Ticket.class.equals(aClass);
+	public boolean supports(Class<?> aClazz) {
+		return Ticket.class.isAssignableFrom(aClazz);
 	}
 
 	@Override

@@ -1,22 +1,20 @@
 package Library.Controller;
 import java.util.List;
 
-//import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import Library.Validator.TicketValidator;
 import Library.Model.Ticket;
 import Library.Repository.TicketRepository;
-import Library.Service.impl.TicketServiceImpl;
-import Library.Validator.BookFormValidator;
+import Library.Service.TicketServiceImpl;
 @RestController
 @RequestMapping("/library")
 public class TicketController {
@@ -24,20 +22,28 @@ public class TicketController {
 	private TicketServiceImpl ticketService;
 	@Autowired
 	private TicketRepository ticketRepository;
-	@RequestMapping(value = "/addticket", method = RequestMethod.POST)
 	
-	public ResponseEntity<String> addTicket(@RequestBody Ticket ticket,BindingResult validate,BookFormValidator BookFormValidator)
+//	@Autowired
+//	private TicketValidator ticketValidator;
+	
+//	@InitBinder("ticket")
+//    public void initBinder(WebDataBinder binder) {
+//        binder.setValidator(ticketValidator);
+//    }
+	@RequestMapping(value = "/ticket", method = RequestMethod.POST)
+	
+	public ResponseEntity<String> addTicket(@RequestBody Ticket ticket,BindingResult re,TicketValidator ticketValidator)
 	{
-		BookFormValidator.validate(ticket, validate);
-		if(validate.hasErrors()) 
+		ticketValidator.validate(ticket, re);
+		if(re.hasErrors()) 
 		{
 			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
 		}
 		else {
-		
 		String result = ticketService.addTicket(ticket.getUserName(),ticket.getIsbn(),ticket.getDateBorrow(),
-				ticket.getDateReturn(),ticket.getIdTicket());
-		if(result != null) {
+				ticket.getDateReturn());
+		if(result != null) 
+		{
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
 			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
@@ -45,8 +51,8 @@ public class TicketController {
 	}
 
 
-	@RequestMapping("ticket/{idticket}")
-	public Ticket getYear(@PathVariable("idticket")final Long idticket) {
+	@RequestMapping(value="ticket/{idticket}",method = RequestMethod.GET)
+	public Ticket getID(@PathVariable("idticket")final Long idticket) {
 			return ticketService.findById(idticket);
 	}
 	@RequestMapping(value ="/ticket",method = RequestMethod.GET)
@@ -54,36 +60,34 @@ public class TicketController {
 		return ticketService.findAll();	
 	}
 	
-	
-	@RequestMapping(value = "{upticket/{idticket}", method = RequestMethod.PATCH)
-	public ResponseEntity<String> updateTicket(@RequestBody Ticket ticket,@PathVariable(value ="idticket")long idticket)
-	{
+	//Update Ticket
+	@RequestMapping(value = "{username}/ticket/{idticket}", method = RequestMethod.PATCH)
+	public Ticket updateTicket(@RequestBody Ticket ticket ,@PathVariable("username") String username,
+			
+			@PathVariable(value ="idticket")long idticket,BindingResult re,TicketValidator ticketValidator)
 		
-		String result = ticketService.updateTicket(ticket.getUserName(),ticket.getIsbn(),ticket.getDateBorrow(), ticket.getDateReturn(),ticket.getIdTicket());
-		if(result != null) {
-			return new ResponseEntity<>(result, HttpStatus.OK);
+	{
+		ticketValidator.validate(ticket, re);
+		if(re.hasErrors()) 
+		{
+			return null;
 		}
-			return new ResponseEntity<>("false", HttpStatus.NOT_FOUND);
+		else {
+		return ticketRepository.save(ticket);
 		}
+	}
 	
 	
-	@RequestMapping("{username}/ticket")
+	@RequestMapping(value = "{username}/ticket", method =  RequestMethod.GET)
 	public List<Ticket> getTicketByUser(@PathVariable("username")final String username) {
 		return (List<Ticket>)ticketService.findByUser(username);	
-		
 	}
-	@RequestMapping("{username}/ticket/{id}")
-	public List<Ticket> deleteByUser(@PathVariable("username")final String username,@PathVariable("id")final long id) {
-		if((List<Ticket>)ticketService.findByUser(username)!=null);
-		{
-			ticketRepository.deleteById(id);
-		}
-		return null;
+	
+	
+	@RequestMapping(value ="{username}/ticket/{id}",method = RequestMethod.DELETE)
+	public void deleteByUser(@RequestBody Ticket ticket,@PathVariable("username")final String username,@PathVariable("id")final long id) {
 		
-	}
-	@DeleteMapping("delete/ticket/{id}")
-	public void deleteTicket(@PathVariable long id) {
-		ticketRepository.deleteById(id);
+		ticketRepository.delete(ticket);
 	}
 	
 }
